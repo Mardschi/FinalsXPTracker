@@ -237,11 +237,11 @@
             height: 100%;
             background: linear-gradient(90deg, #ff6b35, #f7931e, #ffcc02);
             border-radius: 10px;
-            transition: width 0.5s ease, background 0.3s ease; /* Added background to transition */
+            transition: width 0.5s ease, background 0.3s ease;
         }
 
-        .progress-fill.progress-complete { /* New class for 100% */
-            background: linear-gradient(90deg, #4CAF50, #8BC34A); /* Green gradient */
+        .progress-fill.progress-complete {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
         }
 
         .progress-text {
@@ -301,7 +301,7 @@
 
         .xp-dash-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* Forces 3 columns */
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -388,6 +388,9 @@
         }
 
         @media (max-width: 600px) {
+            body {
+                padding: 10px; /* Slightly reduce overall padding for very small screens */
+            }
             .title {
                 font-size: 2rem;
             }
@@ -398,6 +401,35 @@
 
             .button-group {
                 flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .xp-dash-card {
+                padding: 10px; /* Reduce padding inside cards */
+            }
+            .xp-dash-icon {
+                font-size: 1.5rem; /* Smaller icon size */
+            }
+            .xp-dash-title {
+                font-size: 0.85rem; /* Smaller font for titles */
+            }
+            .xp-dash-bonus {
+                font-size: 0.95rem; /* Smaller font for bonus numbers */
+            }
+            .xp-dash-total {
+                font-size: 0.75rem; /* Smaller font for total text */
+            }
+            .xp-dash-grid {
+                gap: 5px; /* Reduce gap between cards */
+            }
+            .xp-dash-note {
+                font-size: 0.9rem; /* Smaller font for the note */
+                padding: 10px;
+            }
+            .info-icon .tooltip-text {
+                width: 150px; /* Adjust tooltip width for smaller screens */
+                font-size: 0.7em;
             }
         }
     </style>
@@ -557,13 +589,13 @@
     </div>
 
     <footer class="footer">
-        <p>This project is open-source! Check out the code on <a href="https://github.com/Mardschi/FinalsXPTracker" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
-        <p>Want to contribute or report an issue? <a href="https://github.com/Mardschi/FinalsXPTracker/issues" target="_blank" rel="noopener noreferrer">Let us know!</a></p>
+        <p>This project is open-source! Check out the code on <a href="https://github.com/your-username/your-repo" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p>Want to contribute or report an issue? <a href="https://github.com/your-username/your-repo/issues" target="_blank" rel="noopener noreferrer">Let us know!</a></p>
         <p style="margin-top: 10px; font-size: 0.8em; color: #888;">This tool is a fan-made project and is not affiliated with, endorsed, or sponsored by Embark Studios or THE FINALS.</p>
     </footer>
 
     <script>
-        const MAX_LEVEL = 100; 
+        const MAX_LEVEL = 106;
         const DEFAULT_XP_PER_LEVEL = 10000;
         const DEFAULT_DAYS_LEFT = 20;
         const DEFAULT_CURRENT_LEVEL = 1;
