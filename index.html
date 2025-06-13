@@ -4,8 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE FINALS - Battlepass XP Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
+        :root {
+            --vaiiya-white: #ffffff;
+            --vaiiya-black: #0a0a0a;
+            --vaiiya-gray: #808080;
+            
+            --cns-silver: #D9D9D9;
+            --cns-cyan: #00FFFF;
+            --cns-mint: #7FFFD4;
+            --cns-yellow: #FFFF00;
+            --cns-orange: #FFA500;
+            --cns-pink: #FF69B4;
+            --cns-purple: #9932CC;
+            
+            --accent-gradient: linear-gradient(45deg, 
+                var(--cns-cyan),
+                var(--cns-mint),
+                var(--cns-yellow),
+                var(--cns-pink),
+                var(--cns-purple)
+            );
+            
+            --tech-gradient: linear-gradient(90deg,
+                var(--vaiiya-black),
+                var(--cns-cyan),
+                var(--cns-purple),
+                var(--vaiiya-black)
+            );
+            
+            --font-display: 'Chakra Petch', sans-serif;
+            --font-body: 'Roboto', sans-serif;
+        }        .container {
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                        inset 0 0 30px rgba(0, 136, 255, 0.1);
+        }
+
+        .title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            background: var(--accent-gradient);
+        }
+
+        .subtitle {
+            font-family: var(--font-display);
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }        .season-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--cns-cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }        .tips h3,
+        .result-label {
+            font-family: var(--font-display);
+            font-weight: 600;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, var(--cns-cyan), var(--cns-purple));
+            border: 1px solid var(--cns-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--vaiiya-white);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-fill {
+            background: var(--accent-gradient);
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.4);
+        }
+
+        .result-value {
+            color: var(--cns-cyan);
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.3);
+        }
+
+        /* Subtle scanline effect for tech theme */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--cns-blue),
+                var(--cns-purple),
+                var(--cns-blue),
+                transparent
+            );
+            opacity: 0.3;
+            animation: scanline 2s linear infinite;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +121,7 @@
 
         body {
             font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            background: linear-gradient(135deg, var(--vaiiya-black) 0%, #1a1a1a 50%, #242424 100%);
             color: #ffffff;
             min-height: 100vh;
             padding: 20px;
@@ -23,14 +130,16 @@
         }
 
         .container {
+            position: relative;
             max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 20px;
             padding: 30px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                        inset 0 0 30px rgba(0, 136, 255, 0.1); /* Increased cyan glow */
             flex-grow: 1;
             margin-bottom: 20px;
         }
@@ -43,7 +152,7 @@
         .title {
             font-size: 2.5rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff6b35, #f7931e, #ffcc02);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -51,9 +160,26 @@
             margin-bottom: 10px;
         }
 
+        .season-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--cns-cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
         .subtitle {
             color: #a0a0a0;
             font-size: 1.1rem;
+        }
+
+        .season-theme {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
         }
 
         .input-section {
@@ -140,49 +266,73 @@
         }
 
         .input-group input:focus, .input-group select:focus {
+            border-color: var(--cns-cyan);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.2);
             outline: none;
-            border-color: #ff6b35;
             background: rgba(255, 255, 255, 0.1);
         }
 
         .button-group {
             display: flex;
+            gap: 20px;
             justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-            margin-bottom: 30px;
+            margin: 30px 0;
         }
 
         .calculate-btn, .reset-btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             cursor: pointer;
             transition: all 0.3s ease;
-            max-width: 300px;
-            width: 100%;
-            margin: 0;
+            border: 1px solid transparent;
+            color: var(--vaiiya-white);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
 
         .calculate-btn {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            background: linear-gradient(45deg, var(--cns-cyan), var(--cns-purple));
+            border: 1px solid var(--cns-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .calculate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            background: linear-gradient(45deg, var(--cns-purple), var(--cns-cyan));
+            border-color: var(--cns-purple);
         }
 
         .reset-btn {
-            background: linear-gradient(45deg, #5a5a5a, #888888);
+            background: linear-gradient(45deg, var(--cns-mint), var(--cns-cyan));
+            border: 1px solid var(--cns-mint);
+            box-shadow: 0 0 20px rgba(127, 255, 212, 0.15);
+            opacity: 0.8;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--vaiiya-black);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         .reset-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(136, 136, 136, 0.3);
+            background: linear-gradient(45deg, var(--cns-cyan), var(--cns-mint));
+            border-color: var(--cns-cyan);
+            box-shadow: 0 0 30px rgba(127, 255, 212, 0.3);
+            opacity: 1;
+        }
+
+        .calculate-btn.success {
+            background: linear-gradient(45deg, #00c853, #64dd17);
+            border-color: #00c853;
+            box-shadow: 0 0 30px rgba(0, 200, 83, 0.3);
+            transition: all 0.3s ease-in-out;
+            color: var(--vaiiya-white);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
 
         .results {
@@ -192,11 +342,12 @@
         }
 
         .result-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+                        inset 0 0 20px rgba(0, 136, 255, 0.1);
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             flex-direction: column;
@@ -204,13 +355,15 @@
         }
         .result-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 30px rgba(0, 136, 255, 0.1),
+                        inset 0 0 30px rgba(162, 0, 255, 0.05);
         }
 
         .result-value {
             font-size: 2rem;
             font-weight: bold;
-            color: #ff6b35;
+            color: var(--cns-cyan);
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.3);
             margin-bottom: 5px;
         }
 
@@ -235,13 +388,14 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ff6b35, #f7931e, #ffcc02);
+            background: var(--accent-gradient);
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.4); /* Stronger glow */
             border-radius: 10px;
             transition: width 0.5s ease, background 0.3s ease; /* Added background to transition */
         }
 
         .progress-fill.progress-complete { /* New class for 100% */
-            background: linear-gradient(90deg, #4CAF50, #8BC34A); /* Green gradient */
+            background: linear-gradient(90deg, var(--vaiiya-white), var(--cns-cyan)); /* Green gradient */
         }
 
         .progress-text {
@@ -252,13 +406,14 @@
         .tips {
             margin-top: 30px;
             padding: 20px;
-            background: rgba(255, 107, 53, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--cns-cyan);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             border-radius: 15px;
-            border-left: 4px solid #ff6b35;
         }
 
         .tips h3 {
-            color: #ff6b35;
+            color: var(--cns-cyan);
             margin-bottom: 10px;
         }
 
@@ -370,14 +525,14 @@
         }
 
         .footer a {
-            color: #ff6b35;
+            color: var(--cns-cyan);
             text-decoration: none;
             font-weight: bold;
             transition: color 0.3s ease;
         }
 
         .footer a:hover {
-            color: #f7931e;
+            color: var(--cns-magenta);
             text-decoration: underline;
         }
 
@@ -385,6 +540,15 @@
             0% { box-shadow: 0 0 0 0 rgba(255, 204, 2, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(255, 204, 2, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 204, 2, 0); }
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100%);
+            }
         }
 
         @media (max-width: 600px) {
@@ -455,13 +619,51 @@
                 font-size: 1.1rem;
             }
         }
+
+        /* Add these CSS rules */
+        .xp-dash-hidden {
+            display: none !important;
+        }
+        
+        /* Optional: Add a class for smooth transitions when showing/hiding */
+        .xp-dash-transition {
+            transition: opacity 0.3s ease, height 0.3s ease;
+        }
+
+        /* Add this to your CSS */
+        .warning-box {
+            background: linear-gradient(90deg,
+                rgba(255, 165, 0, 0.1),
+                rgba(255, 69, 0, 0.1),
+                rgba(255, 165, 0, 0.1)
+            );
+            border: 1px solid var(--cns-orange);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            color: var(--cns-orange);
+            font-family: var(--font-display);
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.1);
+            animation: warningPulse 2s infinite;
+            width: 100%;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1 class="title">THE FINALS</h1>
+            <div class="season-name">THE DIVIDE</div>
             <p class="subtitle">Battlepass XP Tracker</p>
+            <p class="season-theme">Sponsored by VAIIYA Security & CNS</p>
         </div>
 
         <div class="input-section">
@@ -471,7 +673,7 @@
                         <span class="tooltip-text">Your current battle pass level.</span>
                     </span>
                 </label>
-                <input type="number" id="currentLevel" min="1" max="100" value="1" placeholder="Enter current level">
+                <input type="number" id="currentLevel" min="1" max="106" value="1" placeholder="Enter current level">
             </div>
 
             <div class="input-group">
@@ -483,7 +685,7 @@
                 <input type="number" id="currentXP" min="0" value="0" placeholder="XP you already have">
             </div>
 
-            <div class="input-group">
+            <div class="input-group xp-dash-hidden">
                 <label for="xpPerLevel">XP Required Per Level
                     <span class="info-icon">ℹ️
                         <span class="tooltip-text">The total XP needed to complete one full battle pass level.</span>
@@ -498,7 +700,7 @@
                         <span class="tooltip-text">The number of days remaining until the current battle pass season ends.</span>
                     </span>
                 </label>
-                <input type="number" id="daysLeft" min="1" value="19" placeholder="Days remaining">
+                <input type="number" id="daysLeft" min="1" value="92" placeholder="Days remaining">
             </div>
 
             <div class="input-group">
@@ -510,6 +712,30 @@
                 <select id="xpDashActive">
                     <option value="false">No (1x XP)</option>
                     <option value="true" selected>Yes (2x Contracts, 1.5x Gameplay)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="battlepassType">Battlepass Type
+                    <span class="info-icon">ℹ️
+                        <span class="tooltip-text">Select your battlepass type. Ultimate gives a 25% XP boost all season.</span>
+                    </span>
+                </label>
+                <select id="battlepassType">
+                    <option value="standard">Standard</option>
+                    <option value="ultimate">Ultimate (25% XP Boost)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="includeBonusPages">Include Bonus Pages
+                    <span class="info-icon">ℹ️
+                        <span class="tooltip-text">Toggle calculation of bonus page XP (Levels 97-106)</span>
+                    </span>
+                </label>
+                <select id="includeBonusPages">
+                    <option value="false" selected>No</option>
+                    <option value="true">Yes</option>
                 </select>
             </div>
         </div>
@@ -615,142 +841,119 @@
         <p>This project is open-source! Check out the code on <a href="https://github.com/mardschi/FinalsXPTracker" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
         <p>Want to contribute or report an issue? <a href="https://github.com/mardschi/FinalsXPTracker/issues" target="_blank" rel="noopener noreferrer">Let us know!</a></p>
         <p style="margin-top: 10px; font-size: 0.8em; color: #888;">This tool is a fan-made project and is not affiliated with, endorsed, or sponsored by Embark Studios or THE FINALS.</p>
-    </footer>
+    </footer>    <script>
+        const BUTTON_TEXTS = {
+            calculate: '🔥 Update XP Calculations',
+            reset: '↺ RESET ALL'        };
 
-    <script>
-        const MAX_LEVEL = 100;
+        const XP_TIERS = [
+            { startLevel: 1, endLevel: 8, xpPerLevel: 6000 },
+            { startLevel: 9, endLevel: 16, xpPerLevel: 7000 },
+            { startLevel: 17, endLevel: 24, xpPerLevel: 8000 },
+            { startLevel: 25, endLevel: 32, xpPerLevel: 9000 },
+            { startLevel: 33, endLevel: 40, xpPerLevel: 10000 },
+            { startLevel: 41, endLevel: 48, xpPerLevel: 11000 },
+            { startLevel: 49, endLevel: 56, xpPerLevel: 12000 },
+            { startLevel: 57, endLevel: 64, xpPerLevel: 13000 },
+            { startLevel: 65, endLevel: 72, xpPerLevel: 14000 },
+            { startLevel: 73, endLevel: 80, xpPerLevel: 15000 },
+            { startLevel: 81, endLevel: 88, xpPerLevel: 16000 },
+            { startLevel: 89, endLevel: 96, xpPerLevel: 17000 },            { startLevel: 97, endLevel: 101, xpPerLevel: 45000 },
+            { startLevel: 102, endLevel: 106, xpPerLevel: 75000 }
+        ];        const MAX_LEVEL = 106;
         const DEFAULT_XP_PER_LEVEL = 10000;
-        const DEFAULT_DAYS_LEFT = 20;
         const DEFAULT_CURRENT_LEVEL = 1;
         const DEFAULT_CURRENT_XP = 0;
         const AVERAGE_BONUS_MULTIPLIER = 1.65;
+        const ULTIMATE_XP_MULTIPLIER = 1.25;
+        const XP_DASH_ENABLED = false;
+        const AVERAGE_DAILY_XP = 15000;
 
         function calculateXP() {
-            const currentLevel = parseInt(document.getElementById('currentLevel').value) || DEFAULT_CURRENT_LEVEL;
-            const currentXP = parseInt(document.getElementById('currentXP').value) || DEFAULT_CURRENT_XP;
-            const xpPerLevel = parseInt(document.getElementById('xpPerLevel').value) || DEFAULT_XP_PER_LEVEL;
-            const daysLeft = parseInt(document.getElementById('daysLeft').value) || DEFAULT_DAYS_LEFT;
-            const xpDashActive = document.getElementById('xpDashActive').value === 'true';
-
-            if (currentLevel < 1 || currentLevel > MAX_LEVEL) {
-                alert('Please enter a valid level between 1 and 100');
-                return;
-            }
-
-            if (xpPerLevel < 1) {
-                alert('Please enter a positive value for XP Required Per Level');
-                return;
-            }
-
-            if (daysLeft < 1) {
-                alert('Please enter at least 1 day remaining');
+            const currentLevel = parseInt(document.getElementById('currentLevel').value) || 1;
+            const currentXP = parseInt(document.getElementById('currentXP').value) || 0;
+            const daysLeft = parseInt(document.getElementById('daysLeft').value) || 0;
+            const isUltimate = document.getElementById('battlepassType').value === 'ultimate';
+            const includeBonusPages = document.getElementById('includeBonusPages').value === 'true';
+            
+            const maxLevel = includeBonusPages ? 106 : 96;
+            
+            if (currentLevel < 1 || currentLevel > maxLevel) {
+                alert(`Please enter a valid level between 1 and ${maxLevel}`);
                 return;
             }
 
             let totalXPNeeded = 0;
+            let currentTierXP = 0;
             
-            if (currentLevel < MAX_LEVEL) {
-                let xpNeededForCurrentLevel = xpPerLevel - currentXP;
-                if (xpNeededForCurrentLevel < 0) {
-                    xpNeededForCurrentLevel = 0;
+            if (currentLevel < maxLevel) {
+                const currentTier = XP_TIERS.find(tier => 
+                    currentLevel >= tier.startLevel && currentLevel <= tier.endLevel
+                );
+                currentTierXP = currentTier.xpPerLevel - currentXP;
+
+                let remainingLevel = currentLevel + 1;
+                while (remainingLevel <= maxLevel) {
+                    const tier = XP_TIERS.find(tier => 
+                        remainingLevel >= tier.startLevel && remainingLevel <= tier.endLevel
+                    );
+                    totalXPNeeded += tier.xpPerLevel;
+                    remainingLevel++;
                 }
-
-                const levelsRemaining = MAX_LEVEL - currentLevel;
-
-                const xpNeededForFullRemainingLevels = (levelsRemaining > 1) ? (levelsRemaining - 1) * xpPerLevel : 0;
-                
-                totalXPNeeded = xpNeededForCurrentLevel + xpNeededForFullRemainingLevels;
-            } else {
-                totalXPNeeded = 0;
+                totalXPNeeded += currentTierXP;
             }
 
-            let dailyXPNeededNoBonus = 0;
+            let effectiveXPPerDay = AVERAGE_DAILY_XP;
+            if (isUltimate) {
+                effectiveXPPerDay *= ULTIMATE_XP_MULTIPLIER;
+            }
+
+            let daysNeededResult = Math.ceil(totalXPNeeded / effectiveXPPerDay);
+            let dailyXPNeeded = totalXPNeeded;
+
             if (daysLeft > 0) {
-                dailyXPNeededNoBonus = Math.ceil(totalXPNeeded / daysLeft);
+                daysNeededResult = Math.min(daysNeededResult, daysLeft);
+                dailyXPNeeded = Math.ceil(totalXPNeeded / daysNeededResult);
             }
-            
-            let rawXPToEarnDailyWithBonus = dailyXPNeededNoBonus;
-            
-            if (xpDashActive) {
-                if (dailyXPNeededNoBonus > 0) {
-                    rawXPToEarnDailyWithBonus = Math.ceil(dailyXPNeededNoBonus / AVERAGE_BONUS_MULTIPLIER);
-                } else {
-                    rawXPToEarnDailyWithBonus = 0;
-                }
-            }
-
-            const assumedBaseDailyEarnedXP = xpPerLevel;
-            let effectiveDailyEarnedXP = assumedBaseDailyEarnedXP;
-            if (xpDashActive) {
-                effectiveDailyEarnedXP = Math.ceil(assumedBaseDailyEarnedXP * AVERAGE_BONUS_MULTIPLIER);
-            }
-
-            let daysNeededResult = 0;
-            if (totalXPNeeded > 0 && effectiveDailyEarnedXP > 0) {
-                daysNeededResult = Math.ceil(totalXPNeeded / effectiveDailyEarnedXP);
-            } else if (totalXPNeeded === 0) {
-                daysNeededResult = 0;
-            } else {
-                daysNeededResult = Infinity;
-            }
-
-            document.getElementById('totalXPNeeded').textContent = totalXPNeeded.toLocaleString();
-            document.getElementById('daysNeeded').textContent = daysNeededResult === Infinity ? 'N/A' : daysNeededResult.toLocaleString();
-
-            document.getElementById('dailyXPValueNoBonus').textContent = dailyXPNeededNoBonus.toLocaleString();
-            if (xpDashActive) {
-                document.getElementById('dailyXPLabelNoBonus').textContent = 'XP Target Daily (No Bonus)';
-                document.getElementById('dailyXPValueWithBonus').textContent = rawXPToEarnDailyWithBonus.toLocaleString();
-                document.getElementById('dailyXPWithBonusContainer').style.display = 'block';
-            } else {
-                document.getElementById('dailyXPLabelNoBonus').textContent = 'XP Target Daily';
-                document.getElementById('dailyXPWithBonusContainer').style.display = 'none';
-            }
-
-            const progressPercentage = (currentLevel / MAX_LEVEL) * 100;
-            const progressFill = document.getElementById('progressFill');
-            progressFill.style.width = progressPercentage + '%';
-            document.getElementById('progressText').textContent = 
-                `Level ${currentLevel}/${MAX_LEVEL} (${progressPercentage.toFixed(1)}%)`;
-
-            // Update progress bar color
-            if (progressPercentage >= 100) {
-                progressFill.classList.add('progress-complete');
-            } else {
-                progressFill.classList.remove('progress-complete');
-            }
-
-            updateEventBonusInfo(xpDashActive);
 
             document.getElementById('results').style.display = 'grid';
             document.getElementById('progressSection').style.display = 'block';
 
-            const motivationalTexts = [
-                '🔥 Updated XP Calculations',
-                '⚡ Calculations Refreshed', 
-                '🎯 Numbers Crunched',
-                '💪 Ready to Grind',
-                '🚀 Let\'s Go!'
-            ];
-            const randomText = motivationalTexts[Math.floor(Math.random() * motivationalTexts.length)];
+            document.getElementById('totalXPNeeded').textContent = totalXPNeeded.toLocaleString();
+            document.getElementById('daysNeeded').textContent = daysNeededResult.toLocaleString();
+            document.getElementById('dailyXPValueNoBonus').textContent = dailyXPNeeded.toLocaleString();
+
+            const baseProgress = currentLevel <= 96 ? (currentLevel / 96) * 100 : 100;
+            const bonusProgress = currentLevel > 96 && includeBonusPages ? 
+                ((currentLevel - 96) / 10) * 100 : 0;
+            const progressPercentage = Math.min(baseProgress + bonusProgress, 100);
             
-            document.querySelector('.calculate-btn').textContent = randomText;
-            document.querySelector('.calculate-btn').style.background = 
-                'linear-gradient(45deg, #28a745, #20c997)';
-            setTimeout(() => {
-                document.querySelector('.calculate-btn').textContent = '🔥 Update XP Calculations';
-                document.querySelector('.calculate-btn').style.background = 
-                    'linear-gradient(45deg, #ff6b35, #f7931e)';
-            }, 2000);
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = progressPercentage + '%';
+            
+            let progressText = '';
+            if (currentLevel <= 96) {
+                progressText = `Level ${currentLevel}/96 (${progressPercentage.toFixed(1)}%)`;
+            } else {
+                progressText = includeBonusPages ? 
+                    `Bonus Page ${Math.floor((currentLevel - 96) / 5) + 1} (Level ${currentLevel}/106)` :
+                    'Base Pass Complete!';
+            }
+            document.getElementById('progressText').textContent = progressText;
         }
 
         function resetInputs() {
-            document.getElementById('currentLevel').value = DEFAULT_CURRENT_LEVEL;
-            document.getElementById('currentXP').value = DEFAULT_CURRENT_XP;
-            document.getElementById('xpPerLevel').value = DEFAULT_XP_PER_LEVEL;
-            document.getElementById('daysLeft').value = DEFAULT_DAYS_LEFT;
-            document.getElementById('xpDashActive').value = 'true';
-            calculateXP();
+            document.getElementById('currentLevel').value = '1';
+            document.getElementById('currentXP').value = '0';
+            document.getElementById('daysLeft').value = '';
+            document.getElementById('battlepassType').value = 'standard';
+            
+            const resetBtn = document.querySelector('.reset-btn');
+            resetBtn.innerHTML = '<i class="fas fa-check"></i>';
+            
+            setTimeout(() => {
+                resetBtn.innerHTML = '🔄 Reset All';
+            }, 2000);
         }
 
         function updateEventBonusInfo(xpDashActive) {
@@ -764,9 +967,36 @@
                 eventBonusElement.classList.remove('active');
                 bonusTextElement.textContent = 'No XP Dash bonus selected';
             }
-        }
+        }        document.addEventListener('DOMContentLoaded', function() {
+            function updateXPDashVisibility() {
+                const xpDashElements = [
+                    document.querySelector('[for="xpDashActive"]').parentElement,
+                    document.getElementById('eventBonusInfo'),
+                    document.querySelector('.xp-dash-info'),
+                    document.querySelector('.tips')
+                ];
 
-        document.addEventListener('DOMContentLoaded', function() {
+                xpDashElements.forEach(element => {
+                    if (!XP_DASH_ENABLED) {
+                        element.classList.add('xp-dash-hidden');
+                    } else {
+                        element.classList.remove('xp-dash-hidden');
+                    }
+                });                const tipsSection = document.querySelector('.tips');
+                if (!XP_DASH_ENABLED) {
+                    tipsSection.innerHTML = `
+                        <h3>💡 Pro Tips for Season 7</h3>
+                        <ul>
+                            <li><strong>Complete Daily Contracts:</strong> Most efficient way to earn XP</li>
+                            <li><strong>Focus on Objectives:</strong> Playing objectives provides bonus XP</li>
+                            <li>Play during peak hours for faster matchmaking</li>
+                            <li>Tournament modes and ranked matches provide higher base XP</li>
+                            <li>Team play and objective focus grant bonus XP multipliers</li>
+                        </ul>
+                    `;
+                }
+            }            updateXPDashVisibility();
+
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
                 input.addEventListener('change', () => {
@@ -784,6 +1014,14 @@
                 calculateXP();
             }
         });
+
+        function createWarningElement() {
+            const warning = document.createElement('div');
+            warning.id = 'xpWarning';
+            warning.className = 'warning-box';
+            document.querySelector('.results').appendChild(warning);
+            return warning;
+        }
     </script>
 </body>
 </html>
