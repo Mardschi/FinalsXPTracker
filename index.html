@@ -875,52 +875,71 @@
             const daysLeft = parseInt(document.getElementById('daysLeft').value) || 0;
             const isUltimate = document.getElementById('battlepassType').value === 'ultimate';
             const includeBonusPages = document.getElementById('includeBonusPages').value === 'true';
-            
+
             const maxLevel = includeBonusPages ? 106 : 96;
-            
+
             if (currentLevel < 1 || currentLevel > maxLevel) {
                 alert(`Please enter a valid level between 1 and ${maxLevel}`);
                 return;
             }
 
             let totalXPNeeded = 0;
-            let currentTierXP = 0;
-            
-            if (currentLevel < maxLevel) {
-                const currentTier = XP_TIERS.find(tier => 
-                    currentLevel >= tier.startLevel && currentLevel <= tier.endLevel
-                );
-                currentTierXP = currentTier.xpPerLevel - currentXP;
+            let remainingLevels = maxLevel - currentLevel;
 
-                let remainingLevel = currentLevel + 1;
-                while (remainingLevel <= maxLevel) {
-                    const tier = XP_TIERS.find(tier => 
-                        remainingLevel >= tier.startLevel && remainingLevel <= tier.endLevel
+            // Calculate total XP needed based on current level
+            if (currentLevel >= 102) {
+                // In Bonus Page 2
+                totalXPNeeded = remainingLevels * 75000;
+            } else if (currentLevel >= 97) {
+                // In Bonus Page 1
+                let bonusPage1Levels = Math.min(remainingLevels, 101 - currentLevel);
+                let bonusPage2Levels = Math.max(0, remainingLevels - bonusPage1Levels);
+                totalXPNeeded = (bonusPage1Levels * 45000) + (bonusPage2Levels * 75000);
+            } else {
+                // Regular levels calculation
+                // Handle current level remaining XP
+                if (currentLevel <= 96) {
+                    const currentTier = XP_TIERS.find(tier => 
+                        currentLevel >= tier.startLevel && currentLevel <= tier.endLevel
                     );
-                    totalXPNeeded += tier.xpPerLevel;
-                    remainingLevel++;
+                    totalXPNeeded += currentTier.xpPerLevel - currentXP;
+                } else if (currentLevel <= 101) {
+                    totalXPNeeded += 45000 - currentXP;
+                } else if (currentLevel <= 106) {
+                    totalXPNeeded += 75000 - currentXP;
                 }
-                totalXPNeeded += currentTierXP;
+
+                // Add XP for remaining levels
+                for (let level = currentLevel + 1; level <= maxLevel; level++) {
+                    if (level <= 96) {
+                        const tier = XP_TIERS.find(tier => 
+                            level >= tier.startLevel && level <= tier.endLevel
+                        );
+                        totalXPNeeded += tier.xpPerLevel;
+                    } else if (level <= 101) {
+                        totalXPNeeded += 45000;
+                    } else {
+                        totalXPNeeded += 75000;
+                    }
+                }
             }
 
-            let effectiveXPPerDay = AVERAGE_DAILY_XP;
-            if (isUltimate) {
-                effectiveXPPerDay *= ULTIMATE_XP_MULTIPLIER;
-            }
-
-            let daysNeededResult = Math.ceil(totalXPNeeded / effectiveXPPerDay);
+            // Calculate daily XP needed
             let dailyXPNeeded = totalXPNeeded;
-
             if (daysLeft > 0) {
-                daysNeededResult = Math.min(daysNeededResult, daysLeft);
-                dailyXPNeeded = Math.ceil(totalXPNeeded / daysNeededResult);
+                dailyXPNeeded = Math.ceil(totalXPNeeded / daysLeft);
             }
 
+            if (isUltimate) {
+                dailyXPNeeded = Math.ceil(dailyXPNeeded / ULTIMATE_XP_MULTIPLIER);
+            }
+
+            // Show results
             document.getElementById('results').style.display = 'grid';
             document.getElementById('progressSection').style.display = 'block';
-
+            
             document.getElementById('totalXPNeeded').textContent = totalXPNeeded.toLocaleString();
-            document.getElementById('daysNeeded').textContent = daysNeededResult.toLocaleString();
+            document.getElementById('daysNeeded').textContent = Math.min(daysLeft, Math.ceil(totalXPNeeded / AVERAGE_DAILY_XP)).toLocaleString();
             document.getElementById('dailyXPValueNoBonus').textContent = dailyXPNeeded.toLocaleString();
 
             const baseProgress = currentLevel <= 96 ? (currentLevel / 96) * 100 : 100;
